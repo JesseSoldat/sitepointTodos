@@ -61,6 +61,38 @@ describe('TodoDataService', () => {
       expect(service.getAllTodos()).toEqual([todo1, todo2]);
     }));
   });
+
+  describe('#updateTodoById(id, values)', () => {
+    it('should return todo with the corresponding id and updated data', inject([TodoDataService], (service: TodoDataService) => {
+      let todo = new Todo({title: 'Howdy', complete: false});
+      service.addTodo(todo);
+      let updatedTodo = service.updateTodoById(1, {
+        title: 'Good day mate'
+      });
+      expect(updatedTodo.title).toEqual('Good day mate');
+    }));
+
+    it('should return null if todo is not found', inject([TodoDataService], (service: TodoDataService) => {
+      let todo = new Todo({ title: 'Hello 1', complete: false });
+      service.addTodo(todo);
+      let updatedTodo = service.updateTodoById(2, {
+        title: 'new title'
+      });
+      expect(updatedTodo).toEqual(null);
+    }))
+  });
+  describe('#toggleTodoComplete(todo)', () => {
+    it('should return the updated todo with inverse complete status', () => {
+      inject([TodoDataService], (service: TodoDataService) => {
+        let todo = new Todo({ title: 'Hello 1', complete: false });
+        service.addTodo(todo);
+        let updatedTodo = service.toggleTodoComplete(todo);
+        expect(updatedTodo.complete).toEqual(true);
+        service.toggleTodoComplete(todo);
+        expect(updatedTodo.complete).toEqual(false);
+      });
+    });
+  });
 });
 
 
